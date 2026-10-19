@@ -4,7 +4,7 @@
 
 Vehicle Loading Dock adds a dock that automatically loads and unloads the trunk of a parked vehicle. An early-to-mid-game logistics option before you build a large railway or robot network.
 
-![A correctly parked vehicle detected by the dock](https://raw.githubusercontent.com/Kardorio/vehicule_loading_dock/HEAD/portal/gallery/02-vehicule-detecte.png)
+![A correctly parked vehicle detected by the dock](https://raw.githubusercontent.com/Kardorio/vehicule_loading_dock/master/portal/gallery/02-vehicule-detecte.png)
 
 ## Easy parking
 
@@ -24,7 +24,7 @@ Transfers between this inventory and the vehicle are automatic:
 
 Filters do not set quantities. An item may appear in both lists: it will be unloaded first, then loaded again.
 
-![Loading and unloading filter configuration](https://raw.githubusercontent.com/Kardorio/vehicule_loading_dock/HEAD/portal/gallery/03-configuration.png)
+![Loading and unloading filter configuration](https://raw.githubusercontent.com/Kardorio/vehicule_loading_dock/master/portal/gallery/03-configuration.png)
 
 ## See both inventories from your vehicle
 
@@ -35,7 +35,7 @@ While you occupy or remotely drive a vehicle entirely inside the dock area, a si
 - quantities grouped by item and quality;
 - occupied slots in each inventory.
 
-![Automatic vehicle and dock inventory summary](https://raw.githubusercontent.com/Kardorio/vehicule_loading_dock/HEAD/portal/gallery/04-resume-stocks.png)
+![Automatic vehicle and dock inventory summary](https://raw.githubusercontent.com/Kardorio/vehicule_loading_dock/master/portal/gallery/04-resume-stocks.png)
 
 ## Parking status light
 
@@ -45,7 +45,7 @@ A light on the machinery strip indicates the dock's state:
 - **Green:** one supported vehicle is entirely inside the area and stationary.
 - **Off:** insufficient power; transfers are paused.
 
-![A powered dock waiting for a vehicle with an orange light](https://raw.githubusercontent.com/Kardorio/vehicule_loading_dock/HEAD/portal/gallery/01-attente.png)
+![A powered dock waiting for a vehicle with an orange light](https://raw.githubusercontent.com/Kardorio/vehicule_loading_dock/master/portal/gallery/01-attente.png)
 
 ## Research and construction
 

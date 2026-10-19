@@ -16,6 +16,6 @@ La version 1.0.0 est préparée pour la première publication. Le changelog de c
 
 Les deux descriptions intègrent les quatre captures avec des liens absolus :
 
-`https://raw.githubusercontent.com/Kardorio/vehicule_loading_dock/HEAD/portal/gallery/<image>.png`
+`https://raw.githubusercontent.com/Kardorio/vehicule_loading_dock/master/portal/gallery/<image>.png`
 
-`HEAD` suit la branche par défaut sans imposer son nom. Les images doivent être présentes dans ces chemins et accessibles publiquement pour que les liens fonctionnent sans authentification. La préparation du paquet ne change pas la visibilité du dépôt et ne publie pas la fiche du portail.
+`master` désigne explicitement la branche contenant les captures. Les images doivent être présentes dans ces chemins et accessibles publiquement pour que les liens fonctionnent sans authentification. La préparation du paquet ne change pas la visibilité du dépôt et ne publie pas la fiche du portail.

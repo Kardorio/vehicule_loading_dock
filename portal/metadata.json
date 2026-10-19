@@ -13,5 +13,5 @@
   "summary_en": "Automatically load and unload parked vehicles with an electric 8×8 dock, 100 storage slots, independent filters, a status light and an inventory sidebar.",
   "review_description_file": "description.fr.md",
   "repository_url": "https://github.com/Kardorio/vehicule_loading_dock",
-  "gallery_base_url": "https://raw.githubusercontent.com/Kardorio/vehicule_loading_dock/HEAD/portal/gallery/"
+  "gallery_base_url": "https://raw.githubusercontent.com/Kardorio/vehicule_loading_dock/master/portal/gallery/"
 }
