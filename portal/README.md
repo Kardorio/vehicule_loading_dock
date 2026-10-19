@@ -19,3 +19,9 @@ Les deux descriptions intègrent les quatre captures avec des liens absolus :
 `https://raw.githubusercontent.com/Kardorio/vehicule_loading_dock/master/portal/gallery/<image>.png`
 
 `master` désigne explicitement la branche contenant les captures. Les images doivent être présentes dans ces chemins et accessibles publiquement pour que les liens fonctionnent sans authentification. La préparation du paquet ne change pas la visibilité du dépôt et ne publie pas la fiche du portail.
+
+## Démonstration animée
+
+`gallery/05-demonstration.gif` présente un aller-retour entre deux quais échangeant des plaques de fer et du minerai d’uranium, capturé dans un profil Factorio isolé. Les deux stations sont rapprochées à 18 cases entre leurs centres, sur une surface de démonstration isolée. Le cadrage fixe resserré montre les deux stations simultanément et agrandit les quais et les objets transportés. Le terrain est retiré et le fond est transparent ; les quais, leurs marquages, les installations et les voyants sont conservés. La sauvegarde d’origine n’est pas modifiée.
+
+Le GIF ouvre les descriptions française et anglaise : boucle de 6,6 secondes, 880×704 pixels, 8 images par seconde, environ 5,8 Mo.

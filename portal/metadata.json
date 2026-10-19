@@ -8,7 +8,8 @@
     "gallery/01-attente.png",
     "gallery/02-vehicule-detecte.png",
     "gallery/03-configuration.png",
-    "gallery/04-resume-stocks.png"
+    "gallery/04-resume-stocks.png",
+    "gallery/05-demonstration.gif"
   ],
   "summary_en": "Automatically load and unload parked vehicles with an electric 8×8 dock, 100 storage slots, independent filters, a status light and an inventory sidebar.",
   "review_description_file": "description.fr.md",

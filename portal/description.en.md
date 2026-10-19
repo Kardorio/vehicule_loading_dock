@@ -4,7 +4,7 @@
 
 Vehicle Loading Dock adds a dock that automatically loads and unloads the trunk of a parked vehicle. An early-to-mid-game logistics option before you build a large railway or robot network.
 
-![A correctly parked vehicle detected by the dock](https://raw.githubusercontent.com/Kardorio/vehicule_loading_dock/master/portal/gallery/02-vehicule-detecte.png)
+![Loading and unloading iron plates and uranium ore between two docks](https://raw.githubusercontent.com/Kardorio/vehicule_loading_dock/master/portal/gallery/05-demonstration.gif)
 
 ## Easy parking
 
@@ -72,7 +72,3 @@ Blueprints preserve filters. After mining and rebuilding the dock, its filters a
 **Factorio 2.1 only.** No additional mods are required. In-game text is available in English and French.
 
 The recipe adapts to Pyanodon Petroleum Handling. Nullius and Ultracube do not have dedicated compatibility in this version.
-
-## Source and feedback
-
-[Source code](https://github.com/Kardorio/vehicule_loading_dock) · [Report an issue](https://github.com/Kardorio/vehicule_loading_dock/issues)

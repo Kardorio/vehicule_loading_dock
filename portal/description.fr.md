@@ -4,7 +4,7 @@
 
 Vehicle Loading Dock ajoute un quai qui charge et décharge automatiquement le coffre d’un véhicule stationné. Une aide logistique pour le début et le milieu de partie, avant une infrastructure ferroviaire ou robotique importante.
 
-![Un véhicule correctement stationné et détecté par le quai](https://raw.githubusercontent.com/Kardorio/vehicule_loading_dock/master/portal/gallery/02-vehicule-detecte.png)
+![Chargement et déchargement de fer et de minerai d’uranium entre deux quais](https://raw.githubusercontent.com/Kardorio/vehicule_loading_dock/master/portal/gallery/05-demonstration.gif)
 
 ## Un stationnement simple
 
@@ -72,7 +72,3 @@ Les plans mémorisent les filtres. Après minage et repose du quai, les filtres 
 **Factorio 2.1 uniquement.** Aucun autre mod n’est requis. Les textes du mod sont disponibles en français et en anglais.
 
 La recette s’adapte à Pyanodon Petroleum Handling. Nullius et Ultracube ne font pas l’objet d’une compatibilité dédiée dans cette version.
-
-## Code source et retours
-
-[Code source](https://github.com/Kardorio/vehicule_loading_dock) · [Signaler un problème](https://github.com/Kardorio/vehicule_loading_dock/issues)
