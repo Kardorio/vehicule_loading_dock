@@ -1,0 +1,17 @@
+{
+  "title": "Vehicle Loading Dock",
+  "summary_fr": "Chargez et déchargez automatiquement les véhicules stationnés : quai électrique 8×8, stock de 100 emplacements, filtres indépendants et voyant de détection.",
+  "description_file": "description.en.md",
+  "thumbnail_file": "../thumbnail.png",
+  "factorio_version": "2.1",
+  "gallery_files": [
+    "gallery/01-attente.png",
+    "gallery/02-vehicule-detecte.png",
+    "gallery/03-configuration.png",
+    "gallery/04-resume-stocks.png"
+  ],
+  "summary_en": "Automatically load and unload parked vehicles with an electric 8×8 dock, 100 storage slots, independent filters, a status light and an inventory sidebar.",
+  "review_description_file": "description.fr.md",
+  "repository_url": "https://github.com/Kardorio/vehicule_loading_dock",
+  "gallery_base_url": "https://raw.githubusercontent.com/Kardorio/vehicule_loading_dock/HEAD/portal/gallery/"
+}

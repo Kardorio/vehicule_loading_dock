@@ -1,0 +1,13 @@
+{
+  "name": "vehicle-loading-dock",
+  "version": "1.0.0",
+  "title": "Vehicle Loading Dock",
+  "author": "kardagan",
+  "factorio_version": "2.1",
+  "dependencies": [
+    "base >= 2.1.0",
+    "? pypetroleumhandling"
+  ],
+  "description": "Automatically load and unload parked vehicles through a configurable dock with a standard 100-slot inventory, electrical power and a parking status light. Drive in, stop, and let the dock handle the cargo.",
+  "homepage": "https://github.com/Kardorio/vehicule_loading_dock"
+}

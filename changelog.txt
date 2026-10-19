@@ -1,0 +1,7 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2026-10-19
+  Features:
+    - Initial release of the vehicle loading and unloading dock with 100 storage slots, automatic filtered transfers, a parking status light, an inventory sidebar and blueprint configuration.
+  Compatibility:
+    - Adapted recipe for Pyanodon Petroleum Handling.
