@@ -5,3 +5,4 @@ __pycache__/
 factorio-current.log
 factorio-previous.log
 tests/last-smoke.log
+tests/last-circuit.log

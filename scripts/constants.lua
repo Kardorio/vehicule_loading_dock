@@ -1,5 +1,7 @@
 local C = {
   name = "vehicle-loading-dock",
+  circuit_name = "vld-circuit-output",
+  parked_signal = "vld-vehicle-present",
   inventory_name = "vld-inventory",
   check_interval = 10,
   stop_speed_epsilon = 0.001,

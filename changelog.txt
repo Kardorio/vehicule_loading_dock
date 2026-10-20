@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2026-10-20
+  Features:
+    - Connect red and green circuit wires to the dock to read its storage contents, with separate signals for each item quality.
+    - Added a "Parked vehicle" virtual signal.
+  Compatibility:
+    - Circuit readout is automatically enabled for existing docks, and wire connections are preserved when rotating the dock.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2026-10-19
   Features:

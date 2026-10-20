@@ -8,6 +8,7 @@ local Power = require("scripts.power")
 local Inventory = require("scripts.inventory")
 local Indicator = require("scripts.indicator")
 local Summary = require("scripts.summary")
+local Circuit = require("scripts.circuit")
 local Docks = {}
 
 local function initialize_storage()
@@ -103,6 +104,7 @@ function Docks.register(entity, configuration, event, existing_inventory)
   remember(dock)
   Inventory.ensure_capacity(dock)
   Indicator.update(dock)
+  Circuit.update(dock, Detection.find_candidate_vehicle(entity))
   return dock
 end
 
@@ -123,6 +125,7 @@ function Docks.remove(id, buffer)
       if player then Gui.close(player) end
     end
   end
+  Circuit.destroy(dock)
   Indicator.destroy(dock)
   local child = dock.inventory_entity
   if child and child.valid then
@@ -197,6 +200,7 @@ function Docks.sync(dock)
   dock.current_vehicle = nil
   dock.status = Power.is_powered(entity) and "waiting" or "no-power"
   Indicator.update(dock)
+  Circuit.update(dock, Detection.find_candidate_vehicle(entity))
   local viewers = {}
   for player_index, id in pairs(storage.open_docks) do
     if id == entity.unit_number then viewers[#viewers + 1] = player_index end
@@ -218,18 +222,15 @@ function Docks.tick()
     if not dock.entity.valid then
       Docks.remove(id)
     elseif Docks.sync(dock) and dock.inventory_entity.valid then
-      local vehicle, status
-      if Power.is_powered(dock.entity) then
-        vehicle, status = Detection.find_candidate_vehicle(dock.entity)
-      else
-        status = "no-power"
-      end
-      dock.current_vehicle = vehicle
-      dock.status = status
-      if vehicle then
+      local vehicle, status = Detection.find_candidate_vehicle(dock.entity)
+      local powered = Power.is_powered(dock.entity)
+      dock.current_vehicle = powered and vehicle or nil
+      dock.status = powered and status or "no-power"
+      if powered and vehicle then
         Transfer.run(dock.inventory_entity.get_inventory(defines.inventory.chest),
           Detection.get_inventory(vehicle), dock.configuration)
       end
+      Circuit.update(dock, vehicle)
       Indicator.update(dock)
       Gui.refresh(dock)
     end
@@ -259,7 +260,9 @@ end
 function Docks.on_cloned(event)
   local source, target = event.source, event.destination
   if not source.valid or not target.valid then return end
-  if source.name == C.inventory_name then
+  if target.name == C.circuit_name then
+    target.destroy()
+  elseif source.name == C.inventory_name then
     if storage.inventory_owners[target.unit_number] then return end
     local source_id = storage.inventory_owners[source.unit_number]
     local source_dock = source_id and storage.docks[source_id]
@@ -313,6 +316,7 @@ function Docks.initialize()
       dock.status = Power.is_powered(dock.entity) and "waiting" or "no-power"
       dock.current_vehicle = nil
       Indicator.update(dock)
+      Circuit.update(dock, Detection.find_candidate_vehicle(dock.entity))
       Gui.refresh(dock, true)
     end
   end

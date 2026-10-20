@@ -75,6 +75,13 @@ data:extend({
         west_animation = animation("west"),
       }},
     },
+    circuit_wire_max_distance = 9,
+    circuit_connector = circuit_connector_definitions.create_vector(universal_connector_template, {
+      {variation = 26, main_offset = {-1.5, -3.5}, shadow_offset = {-1.5, -3.5}, show_shadow = true},
+      {variation = 26, main_offset = {3.5, -1.5}, shadow_offset = {3.5, -1.5}, show_shadow = true},
+      {variation = 26, main_offset = {1.5, 3.5}, shadow_offset = {1.5, 3.5}, show_shadow = true},
+      {variation = 26, main_offset = {-3.5, 1.5}, shadow_offset = {-3.5, 1.5}, show_shadow = true},
+    }),
     crafting_categories = {"vld-unused"},
     crafting_speed = 1,
     ingredient_count = 0,
@@ -138,3 +145,32 @@ data:extend({
 })
 
 table.insert(data.raw.technology.automobilism.effects, {type = "unlock-recipe", recipe = name})
+
+local output = table.deepcopy(data.raw["constant-combinator"]["constant-combinator"])
+output.name = C.circuit_name
+output.flags = {"placeable-off-grid", "not-on-map", "not-blueprintable", "not-deconstructable", "hide-alt-info"}
+output.hidden = true
+output.selectable_in_game = false
+output.minable = nil
+output.collision_box = {{0, 0}, {0, 0}}
+output.collision_mask = {layers = {}}
+output.selection_box = {{0, 0}, {0, 0}}
+output.sprites = {filename = "__core__/graphics/empty.png", size = 1}
+output.activity_led_sprites = nil
+output.activity_led_light = nil
+output.draw_circuit_wires = false
+output.draw_copper_wires = false
+output.allow_copy_paste = false
+output.fast_replaceable_group = nil
+output.water_reflection = nil
+output.corpse = nil
+output.dying_explosion = nil
+
+data:extend({output, {
+  type = "virtual-signal",
+  name = C.parked_signal,
+  icon = "__base__/graphics/icons/car.png",
+  icon_size = 64,
+  subgroup = "virtual-signal-special",
+  order = "z[vehicle-loading-dock]",
+}})
