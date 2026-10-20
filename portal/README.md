@@ -24,4 +24,12 @@ Les deux descriptions intègrent les quatre captures avec des liens absolus :
 
 `gallery/05-demonstration.gif` présente un aller-retour entre deux quais échangeant des plaques de fer et du minerai d’uranium, capturé dans un profil Factorio isolé. Les deux stations sont rapprochées à 18 cases entre leurs centres, sur une surface de démonstration isolée. Le cadrage fixe resserré montre les deux stations simultanément et agrandit les quais et les objets transportés. Le terrain est retiré et le fond est transparent ; les quais, leurs marquages, les installations et les voyants sont conservés. La sauvegarde d’origine n’est pas modifiée.
 
-Le GIF ouvre les descriptions française et anglaise : boucle de 6,6 secondes, 880×704 pixels, 8 images par seconde, environ 5,8 Mo.
+Le GIF ouvre les descriptions française et anglaise : boucle de 18,4 secondes, 880×704 pixels, 8 images par seconde, environ 16,5 Mo. La lecture est accélérée de 50 %. Chaque départ attend le vidage effectif des tapis, du quai et des bras de déchargement, puis laisse une seconde de pause avec les tapis vides à l’écran. Le dernier déchargement est également terminé avant la fin de la boucle.
+
+La capture peut être reproduite avec la sauvegarde de démonstration d’origine :
+
+```sh
+python3 tools/record_portal_demo.py --save "/chemin/vers/test vehicule loading.zip"
+```
+
+Le script utilise Factorio, FFmpeg, Python 3, NumPy et Pillow ; ImageMagick est facultatif. Il travaille sur une copie temporaire de la sauvegarde. Les filtres du coffre du véhicule limitent la cargaison à une pile de fer et une pile de minerai d’uranium pour montrer des lots finis. Les états des tapis sont contrôlés dans le moteur avant chaque départ.
