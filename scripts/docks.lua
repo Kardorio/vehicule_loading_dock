@@ -111,7 +111,11 @@ end
 function Docks.on_built(event)
   local entity = event.entity
   if entity and entity.valid and entity.name == C.name then
-    Docks.register(entity, tags_from_event(event), event)
+    local tags = tags_from_event(event)
+    local dock = Docks.register(entity, tags, event)
+    if dock and type(tags) == 'table' then
+      Inventory.apply(dock.inventory_entity.get_inventory(defines.inventory.chest), tags.inventory)
+    end
   end
 end
 
@@ -163,11 +167,11 @@ function Docks.sync(dock)
     old.force = entity.force
     return true
   end
-  local inventory, temporary, bar
+  local inventory, temporary, settings
   if old and old.valid then
     inventory = old.get_inventory(defines.inventory.chest)
     temporary = game.create_inventory(#inventory)
-    bar = inventory.get_bar()
+    settings = Inventory.serialize(inventory)
     for i = 1, #inventory do temporary[i].swap_stack(inventory[i]) end
     storage.inventory_owners[old.unit_number] = nil
     old.destroy()
@@ -193,7 +197,7 @@ function Docks.sync(dock)
   if temporary then
     inventory = child.get_inventory(defines.inventory.chest)
     for i = 1, #temporary do inventory[i].swap_stack(temporary[i]) end
-    inventory.set_bar(bar)
+    Inventory.apply(inventory, settings)
     temporary.destroy()
   end
   remember(dock)
@@ -243,7 +247,11 @@ function Docks.on_blueprint(event)
   for index, entity in pairs(event.mapping.get()) do
     if entity.valid and entity.name == C.name then
       local dock = storage.docks[entity.unit_number]
-      if dock then blueprint.set_blueprint_entity_tags(index, {vld = Configuration.serialize(dock.configuration)}) end
+      if dock then
+        local settings = Configuration.serialize(dock.configuration)
+        settings.inventory = Inventory.serialize(dock.inventory_entity.get_inventory(defines.inventory.chest))
+        blueprint.set_blueprint_entity_tags(index, {vld = settings})
+      end
     end
   end
 end
@@ -274,8 +282,8 @@ function Docks.on_cloned(event)
         and main.direction == target.direction then
         if source_dock then
           Inventory.ensure_capacity(source_dock)
-          target.get_inventory(defines.inventory.chest).set_bar(
-            source_dock.inventory_entity.get_inventory(defines.inventory.chest).get_bar())
+          Inventory.apply(target.get_inventory(defines.inventory.chest),
+            Inventory.serialize(source_dock.inventory_entity.get_inventory(defines.inventory.chest)))
         end
         Docks.register(main, source_dock and source_dock.configuration, nil, target)
         return
@@ -295,8 +303,8 @@ function Docks.on_cloned(event)
         for i = 1, #from do to[i].set_stack(from[i]) end
       end
       if original.inventory_entity.valid then
-        destination.inventory_entity.get_inventory(defines.inventory.chest).set_bar(
-          original.inventory_entity.get_inventory(defines.inventory.chest).get_bar())
+        Inventory.apply(destination.inventory_entity.get_inventory(defines.inventory.chest),
+          Inventory.serialize(original.inventory_entity.get_inventory(defines.inventory.chest)))
       end
     end
   end

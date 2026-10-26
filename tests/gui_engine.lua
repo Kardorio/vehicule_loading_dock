@@ -108,6 +108,12 @@ script.on_event(defines.events.on_tick, function(event)
   visual_check(storage.visual_car.get_inventory(defines.inventory.car_trunk).get_item_count('iron-plate') == 75, 'GUI filter loads actual car')
   visual_check(chest.get_item_count('copper-plate') == 25, 'GUI filter unloads actual car')
   chest.insert{name = 'steel-plate', count = 32}
+  chest.set_filter(1, 'copper-plate')
+  chest.set_filter(3, 'iron-plate')
+  chest.set_filter(10, 'coal')
+  chest.set_bar(21)
+  visual_check(chest.supports_filters() and chest.get_filter(3).name=='iron-plate' and chest.get_bar()==21,
+    '006-AC1 native GUI inventory has blue filters and red limiter')
   player.opened = nil
   Gui.on_closed{entity = dock.inventory_entity, player_index = player.index}
   visual_check(not player.gui.relative.vld_configuration, 'real relative frame closes')

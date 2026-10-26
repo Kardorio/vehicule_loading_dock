@@ -132,7 +132,7 @@ data:extend({
     inventory_size = C.inventory_size,
     quality_affects_inventory_size = false,
     direction_count = 4,
-    inventory_type = "with_bar",
+    inventory_type = "with_filters_and_bar",
     picture = {filename = "__core__/graphics/empty.png", size = 1},
     open_sound = {filename = "__base__/sound/metallic-chest-open.ogg", volume = 0.5},
     close_sound = {filename = "__base__/sound/metallic-chest-close.ogg", volume = 0.5},

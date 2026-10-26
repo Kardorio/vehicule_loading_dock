@@ -23,6 +23,7 @@ with tempfile.TemporaryDirectory(prefix='vld-migration-') as directory:
     prototype = source / 'prototypes/dock.lua'
     current = prototype.read_text()
     old = current.replace('inventory_size = C.inventory_size,', 'inventory_size = C.legacy_inventory_size,')
+    old = old.replace('inventory_type = "with_filters_and_bar"', 'inventory_type = "with_bar"')
     assert old != current, 'Inventory prototype replacement did not match'
     prototype.write_text(old)
     control = source / 'control.lua'

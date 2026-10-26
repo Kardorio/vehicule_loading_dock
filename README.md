@@ -13,6 +13,10 @@ Mod pour **Factorio 2.1**. Le joueur conduit son véhicule ; le quai automatise 
 
 Les voitures, chars et spidertrons sont compatibles, ainsi que les véhicules de mods utilisant les types `car` et `spider-vehicle` avec un coffre. Seul le coffre est manipulé : ni carburant, ni munitions, ni grille d’équipement. Le véhicule doit appartenir à la force du quai.
 
+Le stock se règle comme celui d’un wagon : utilisez le bouton central de la souris pour réserver un emplacement à un objet (filtre bleu) et la barre rouge pour limiter les emplacements disponibles au remplissage automatique. Les bras et le déchargement du véhicule respectent ces réglages ; le contenu des emplacements bloqués reste récupérable. Les filtres bleus réservent des emplacements, sans définir une quantité cible à maintenir. Ils complètent les deux listes de filtres qui choisissent les objets à transférer.
+
+Les filtres du stock et la limite rouge sont conservés à la rotation et dans les sauvegardes. Les plans, copier-coller et couper-coller reprennent ces réglages sans reproduire le contenu du stock. Une repose après minage, sans plan, repart sans réglages de stock.
+
 La détection est locale et s’effectue toutes les dix ticks. La bounding box entière doit tenir dans le stationnement, sans alignement contre les bras. Si plusieurs véhicules compatibles y sont entièrement contenus, les transferts sont suspendus. Un objet présent dans les deux listes est déchargé, puis rechargé.
 
 La rotation conserve l’empreinte carrée et le stock. Elle est refusée si la nouvelle bande technique est occupée. Le minage récupère le stock, mais les filtres sont vides lors de la repose. Les plans mémorisent les filtres ; la copie directe des réglages entre quais n’est pas prise en charge. En cas de destruction, le stock restant est déposé au sol.

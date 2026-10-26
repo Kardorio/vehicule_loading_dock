@@ -71,6 +71,10 @@ local function setup()
     local inv = c.get_inventory(defines.inventory.chest)
     inv.insert {name = 'iron-plate',count = 37}
     inv.set_bar(17)
+    check(inv.supports_filters() and inv.supports_bar(), '006-AC1 native stock supports filters and bar')
+    inv.set_filter(1, 'iron-plate')
+    inv.set_filter(100, {name='copper-plate',quality='normal',comparator='≥'})
+    inv.set_filter(99, {quality='normal',comparator='≥'})
     local previous = e.direction
     check(e.rotate(), '001-AC7 native square rotation supported')
     Docks.on_rotated {entity=e, previous_direction=previous}
@@ -78,6 +82,11 @@ local function setup()
     check(c and c.get_inventory(defines.inventory.chest).get_item_count('iron-plate') == 37,
       '001-AC7 rotation conserves stock')
     check(c.get_inventory(defines.inventory.chest).get_bar() == 17, '001-AC7 rotation conserves bar')
+    local rotated = c.get_inventory(defines.inventory.chest)
+    check(rotated.get_filter(1).name=='iron-plate' and rotated.get_filter(100).name=='copper-plate'
+      and rotated.get_filter(100).comparator=='≥', '006-AC4 rotation preserves sparse filters and quality comparator')
+    check(rotated.get_filter(99) and not rotated.get_filter(99).name
+      and rotated.get_filter(99).comparator=='≥', '006-AC4 rotation preserves quality-only filters')
     Docks.on_removed {entity=e};e.destroy()
     check(not c.valid, '001-AC7 main removal destroys child')
   end
@@ -110,6 +119,23 @@ local function setup()
     Transfer.transfer_item(from,to,'iron-plate')
     check(to.get_item_count {name='iron-plate',quality='legendary'}==7, '001-AC6 legendary quality preserved')
   end
+  from.clear();to.clear();to.set_bar(3)
+  to.set_filter(1, 'copper-plate');to.set_filter(2, 'iron-plate')
+  to.set_filter(3, 'iron-plate')
+  from[1].set_stack {name='iron-plate',count=100}
+  from[2].set_stack {name='iron-plate',count=50}
+  check(Transfer.transfer_item(from,to,'iron-plate')==100 and from[2].count==50
+    and not to[1].valid_for_read and not to[3].valid_for_read,
+    '006-AC2 vehicle unloading respects blue filters and red bar together')
+  check(Transfer.transfer_item(from,to,'iron-plate')==0 and from[2].count==50,
+    '006-AC2 saturated filtered stock stops without loss')
+  to[3].set_stack {name='iron-plate',count=17}
+  check(to[3].count==17 and to.get_bar()==3, '006-AC3 manual placement beyond bar preserves contents')
+  from.clear()
+  check(Transfer.transfer_item(to,from,'iron-plate')==117 and to.is_empty(),
+    '006-AC3 extraction includes stock beyond red bar')
+  to.set_filter(2, nil)
+  check(not to.get_filter(2), '006-AC1 native filter can be cleared')
   from.destroy();Docks.on_removed {entity=transfer_dock};transfer_dock.destroy()
 
   -- 001-AC7: mining returns stock, while rebuilding starts with empty filters.
@@ -149,6 +175,16 @@ local function setup()
   unloader.get_fuel_inventory().insert {name='coal',count=5}
   child(inserter_dock).insert {name='copper-plate',count=3}
   storage.feed,storage.output,storage.unloader=feed,output,unloader
+  local restricted = dock({-16,24},defines.direction.north)
+  local restricted_stock = child(restricted).get_inventory(defines.inventory.chest)
+  restricted_stock.set_filter(1, 'copper-plate')
+  restricted_stock.set_bar(2)
+  local blocked_feed=surface.create_entity {name='iron-chest',position={-15.5,18.5},force='player'}
+  blocked_feed.insert {name='iron-plate',count=5}
+  local blocked_loader=surface.create_entity {name='burner-inserter',position={-15.5,19.5},force='player'}
+  if blocked_loader.drop_position.y<19.5 then blocked_loader.direction=defines.direction.south end
+  blocked_loader.get_fuel_inventory().insert {name='coal',count=5}
+  storage.restricted,storage.blocked_feed,storage.blocked_loader=restricted,blocked_feed,blocked_loader
   -- 001-AC2: spider vehicles expose their trunk through the same contract.
   local spider_dock=dock({-32,32},defines.direction.north)
   local spider=surface.create_entity {name='spidertron',position={-32,33},force='player'}
@@ -158,17 +194,26 @@ local function setup()
   local blocked=dock({48,-16},defines.direction.north)
   local original=child(blocked).get_inventory(defines.inventory.chest)
   original.insert {name='coal',count=13};original.set_bar(9)
+  original.set_filter(100, 'steel-plate')
+  original.set_filter(99, {quality='normal',comparator='≥'})
   local wall=surface.create_entity {name='stone-wall',position={51.5,-15.5},force='player'}
   blocked.direction=defines.direction.east
   check(not Docks.sync(storage.docks[blocked.unit_number]),'001-AC7 obstructed rotation rejected')
   check(blocked.direction==defines.direction.north and child(blocked).get_inventory(defines.inventory.chest).get_item_count('coal')==13,
     '001-AC7 rejected rotation restores orientation and stock')
   check(child(blocked).get_inventory(defines.inventory.chest).get_bar()==9,'001-AC7 rejected rotation restores limiter')
+  check(child(blocked).get_inventory(defines.inventory.chest).get_filter(100).name=='steel-plate',
+    '006-AC4 rejected rotation preserves filters')
+  check(child(blocked).get_inventory(defines.inventory.chest).get_filter(99).comparator=='≥',
+    '006-AC4 rejected rotation preserves quality-only filters')
   Docks.on_removed {entity=blocked};blocked.destroy();wall.destroy()
   -- 001-AC7: blueprint tags preserve a filter in the tenth slot.
   local clone_source=dock({32,-16},defines.direction.east,{load_filters={[10]='coal'},unload_filters={[9]='copper-plate'}})
   child(clone_source).get_inventory(defines.inventory.chest).insert {name='coal',count=77}
   child(clone_source).get_inventory(defines.inventory.chest).set_bar(51)
+  child(clone_source).get_inventory(defines.inventory.chest).set_filter(1, 'coal')
+  child(clone_source).get_inventory(defines.inventory.chest).set_filter(100, 'steel-plate')
+  child(clone_source).get_inventory(defines.inventory.chest).set_filter(99, {quality='normal',comparator='≥'})
   storage.clone_source=clone_source
   local blueprint=game.create_inventory(1)
   blueprint[1].set_stack {name='blueprint',count=1}
@@ -178,6 +223,8 @@ local function setup()
     if item.name=='vehicle-loading-dock' then mapping[item.entity_number]=clone_source end
   end
   Docks.on_blueprint {stack=blueprint[1],mapping={get=function()return mapping end}}
+  local exported = blueprint[1].export_stack()
+  check(blueprint[1].import_stack(exported)==0, '006-AC5 blueprint settings survive native string export and import')
   for _,item in pairs(blueprint[1].get_blueprint_entities()) do
     if item.name=='vehicle-loading-dock' then
       check(Configuration.normalize(item.tags.vld).load_filters[10]=='coal','001-AC7 blueprint retains sparse filters')
@@ -186,9 +233,14 @@ local function setup()
       local settings = storage.docks[rebuilt.unit_number].configuration
       check(settings.load_filters[10]=='coal' and settings.unload_filters[9]=='copper-plate',
         'blueprint construction restores both sparse filter lists')
+      local stock=child(rebuilt).get_inventory(defines.inventory.chest)
+      check(stock.get_bar()==51 and stock.get_filter(1).name=='coal'
+        and stock.get_filter(100).name=='steel-plate' and stock.is_empty(),
+        '006-AC5 blueprint and copy construction restore stock settings without cargo')
       Docks.on_removed {entity=rebuilt};rebuilt.destroy()
     end
   end
+  storage.stock_blueprint = exported
   blueprint.destroy()
   -- 001-AC7: robot construction reads settings carried by the construction item.
   local tagged=game.create_inventory(1)
@@ -227,6 +279,29 @@ script.on_event(defines.events.on_tick,function(event)
   if storage.phase == 1 and event.tick >= 20 then
     check(storage.docks[storage.clone_source.unit_number].indicator.bulb.valid,
       '002-AC4 periodic update repairs legacy indicator after reload')
+    local blueprint=game.create_inventory(1)
+    blueprint[1].import_stack(storage.stock_blueprint)
+    local ghosts = blueprint[1].build_blueprint {surface=storage.surface,force='player',position={64,32}}
+    local revived
+    for _, ghost in pairs(ghosts) do
+      if ghost.ghost_name=='vehicle-loading-dock' then
+        local success
+        success, revived = ghost.revive {raise_revive=true}
+        check(success and revived and storage.docks[revived.unit_number],
+          '006-AC5 native blueprint revival registers dock through event')
+      end
+    end
+    check(revived ~= nil, '006-AC5 native blueprint creates dock ghost')
+    local pasted = child(revived).get_inventory(defines.inventory.chest)
+    check(pasted.get_bar()==51 and pasted.get_filter(100).name=='steel-plate' and pasted.is_empty(),
+      '006-AC5 native paste restores stock filters and limiter without cargo')
+    check(pasted.get_filter(99) and not pasted.get_filter(99).name and pasted.get_filter(99).comparator=='≥',
+      '006-AC5 native blueprint paste preserves quality-only filters')
+    Docks.on_removed {entity=revived};revived.destroy()
+    blueprint.destroy()
+    local saved = child(storage.clone_source).get_inventory(defines.inventory.chest)
+    check(saved.get_bar()==51 and saved.get_filter(1).name=='coal' and saved.get_filter(100).name=='steel-plate',
+      '006-AC4 save and reload preserve native stock settings')
     -- 001-AC7: native cloning creates all entities before raising clone events.
     storage.surface.clone_area {source_area={{27,-21},{37,-11}},destination_area={{59,-21},{69,-11}},
       clone_entities=true,clone_tiles=false}
@@ -244,6 +319,12 @@ script.on_event(defines.events.on_tick,function(event)
       '001-AC7 single entity clone copies stock')
     check(child(cloned).get_inventory(defines.inventory.chest).get_bar()==51,
       '002-AC2 single clone preserves intentional fifty-slot limiter')
+    check(child(cloned).get_inventory(defines.inventory.chest).get_filter(100).name=='steel-plate'
+      and children[1].get_inventory(defines.inventory.chest).get_filter(100).name=='steel-plate',
+      '006-AC5 single and area clones preserve sparse filters')
+    check(child(cloned).get_inventory(defines.inventory.chest).get_filter(99).comparator=='≥'
+      and children[1].get_inventory(defines.inventory.chest).get_filter(99).comparator=='≥',
+      '006-AC5 single and area clones preserve quality-only filters')
     local e,car = storage.dock,storage.car
     check(e.is_connected_to_electric_network(), '002-AC1 dock connects to native electrical network')
     check_indicator(storage.docks[e.unit_number], 'ready')
@@ -307,6 +388,10 @@ script.on_event(defines.events.on_tick,function(event)
   elseif storage.phase==5 and event.tick>=900 then
     check(storage.feed.get_item_count('iron-plate')==0,'001-AC4 regular inserter feeds strip')
     check(storage.output.get_item_count('copper-plate')==3,'001-AC4 regular inserter empties strip')
+    local restricted_stock = child(storage.restricted).get_inventory(defines.inventory.chest)
+    check(restricted_stock.is_empty(), '006-AC2 native inserter respects stock filter and red bar')
+    check(storage.blocked_feed.get_item_count('iron-plate') + storage.blocked_loader.held_stack.count == 5,
+      '006-AC2 blocked inserter preserves all input items')
     helpers.write_file('vld-smoke-result.txt','VLD SMOKE OK\n',false)
     log('VLD SMOKE OK')
     storage.phase=6
